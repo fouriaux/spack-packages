@@ -9,8 +9,10 @@ case "$TRAVIS_OS_NAME" in
     osx)
         brew update > /dev/null
         brew install flex bison modules
+        brew install gsl
         brew tap homebrew/science
         brew install lmod
+        brew install python3
 
         case "$MPI_LIB_NAME" in
             mpich|mpich3)
@@ -28,6 +30,9 @@ case "$TRAVIS_OS_NAME" in
 
     linux)
         sudo apt-get update -q
+        sudo apt-get install -y libgsl0-dev
+        sudo apt-get install -y cython
+        sudo apt-get install -y libpython3-dev
 
         # TODO: workaround for bug in Ubuntu 14.04
         # check https://bugs.launchpad.net/ubuntu/+source/python2.7/+bug/1115466
@@ -52,3 +57,7 @@ case "$TRAVIS_OS_NAME" in
         exit 1
         ;;
 esac
+
+# print python paths in case we need for debugging
+python -c "import sysconfig; print sysconfig.get_config_var('LIBDIR')"
+python3 -c "import sysconfig; print (sysconfig.get_config_var('LIBDIR'))"
