@@ -45,6 +45,7 @@ class Coreneuron(CMakePackage):
     variant('knl',           default=False, description="Enable KNL specific flags")
     variant('tests',         default=False, description="Enable building tests")
     variant('profile',       default=False, description="Enable profiling using Tau")
+    variant('vtune',         default=False, description="Enable profiling using Intel Vtune")
 
     # mandatory dependencies
     depends_on('cmake@2.8.12:', type='build')
@@ -109,6 +110,8 @@ class Coreneuron(CMakePackage):
                    '-DCMAKE_C_FLAGS=%s' % optflag,
                    '-DCMAKE_CXX_FLAGS=%s' % optflag,
                    '-DCMAKE_BUILD_TYPE=CUSTOM']
+        if spec.satisfies('+vtune'):
+            options.extend(['-DENABLE_VTUNE=ON'])
 
         if 'bgq' in spec.architecture and '%xl' in spec:
             options.append('-DCMAKE_BUILD_WITH_INSTALL_RPATH=1')
